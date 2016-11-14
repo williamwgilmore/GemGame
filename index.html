@@ -6,16 +6,18 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<!-- Adding jQuery -->
 		<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+		<!-- css link -->
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	</head>
 	<body>
 		<div class = "container">
 			<div class = "row">
-				<div class = "col-md-4">
+				<div class = "col-md-4 title">
 					<h1>Crystal Collector</h1>
 				</div>
 			</div>
 			<div class = "row">
-				<div class = "col-md-5">
+				<div class = "col-md-5 instructions">
 					<p>You will be given a random number at the start of the game</p>
 					<p>There are four crystals below. By clicking on a crystal you will add a specific amount of points to your total score.</p>
 					<p>You win the game by matching your total score to the random number, and you lose if your total score exceeds the number.</p>
@@ -25,19 +27,19 @@
 			</div>
 			<div class = "row">
 				<div class = "col-md-3">
-					<h3>Random Number</h3>
+					<h3 class = "num">Random Number</h3>
 				</div>
 				<div class = "col-md-1">
-					<p>Wins:   0</p>
-					<p>Losses: 0</p>
+					<p class="win">Wins: 0</p>
+					<p class="lose">Losses: 0</p>
 				</div>
 			</div>
 			<div class = "row">
-				<div class = "col-md-1">
-					<img src="assets/image/sapphire.jpg" class="gem" alt="Sapphire" height="100" width="100">
-					<img src="assets/image/ruby.jpg" class="gem" alt="Ruby" height="100" width="100">
-					<img src="assets/image/topaz.jpg" class="gem" alt="Topaz" height="100" width="100">
-					<img src="assets/image/emerald.jpg" class="gem" alt="Emerald" height="100" width="100">
+				<div class = "col-md-12">
+					<img src="assets/image/sapphire.jpg" class="gem" alt="Sapphire" value="0" height="100" width="100">
+					<img src="assets/image/ruby.jpg" class="gem" alt="Ruby" value="1" height="100" width="100">
+					<img src="assets/image/topaz.jpg" class="gem" alt="Topaz" value="2" height="100" width="100">
+					<img src="assets/image/emerald.jpg" class="gem" alt="Emerald" value="3" height="100" width="100">
 				</div>
 			</div>
 			<div class = "row">
@@ -46,8 +48,23 @@
 				</div>
 			</div>
 			<div class = "row">
-				<div class = "col-md-3">
+				<div class = "col-md-3 score">
 					<h2>0</h2>
+				</div>
+			</div>
+			<div class = "row">
+				<div class = "col-md-3">
+					<p>Target score:</p>
+				</div>
+			</div>
+			<div class = "row">
+				<div class = "col-md-3 goal">
+					<h2>0</h2>
+				</div>
+			</div>
+			<div class = "row">
+				<div class = "col-md-12">
+					<p class = "result"></p>
 				</div>
 			</div>
 			<div class = "row">
@@ -58,57 +75,126 @@
 				</div>
 			</div>
 		</div>
+
+
+
 		<script type="text/javascript">
+		$(document).ready(function(){
+
+			//where the value of the gems are stored
+			var gems = [0,0,0,0];
+
+			//holds gem values so we can ensure that each is unique
 			var gem1=0;
 			var gem2=0;
 			var gem3=0;
 			var gem4=0;
 
+			//stores the random number while it is being compared to the other numbers to ensure it is unique
 			var rndnum=0;
 
-			var values=[3,4,5,6,7,8,9,10];
+			//list of possible gem values
+			var values=[3,4,5,6,2,3,4,10];
 			
+			//users score and the goal they're trying to reach
 			var score=0;
 			var goal=0;
 
+			//score keeping variables
 			var wins=0;
 			var lose=0;
+
 			//Begins the game -- Assigns value to the gems, generates the target number, and disables the start button
 			var newGame = function(){
-				//gemValue();
-				//randomTarget();
+				score=0;
+				$('.score').empty().append(score);
+				gemValue();
+				randomTarget();
 				$(".startGame").addClass('disabled');
 				$(".startGame").fadeTo("fast", 0);
 			};
+
+			//gives each gem a unique value
 			var gemValue = function(){
+
+				//set each value to 0, resets the function
+				gem1 = 0;
+				gem2 = 0;
+				gem3 = 0;
+				gem4 = 0;
+
+				//run the choose function which gives each gem a random number from 1-8. No duplicates are allowed.
 				gem1 = choose();
 				gem2 = choose();
 				gem3 = choose();
 				gem4 = choose();
 
-				gem1 = values[gem1];
-				gem2 = values[gem2];
-				gem3 = values[gem3];
-				gem4 = values[gem4];
+				//we then translate the random number(1-8) into the corresponding value from the values[] array
+				gems[0] = values[gem1];
+				gems[1] = values[gem2];
+				gems[2] = values[gem3];
+				gems[3] = values[gem4];
 			}
 
-			//choose a number, make sure it is unique
+			//choose a number, make sure that it is not a duplicate
 			var choose = function(){
+				//reset the function
 				var i=0;
 				while (i<1){
+					//generate a number 1-8
 					rndnum = Math.floor(Math.random()*8);
+					//make sure the number is not a duplicate
 					if (rndnum != gem1 && rndnum != gem2 && rndnum != gem3 && rndnum != gem4){
+						//exits the loop, we have a new random number
 						i++;
+						//returns the value
 						return rndnum;
 					}
 				}
 			}
+
+			//generate the random number the user tries to reach
+			var randomTarget = function(){
+				goal = (Math.floor(Math.random()*50+gem1+gem2+gem3+gem4+20));
+				$('.goal').empty().append(goal);
+			}
+
+			//checks the win/lose conditions
+			var checkGame = function(){
+				if (goal === score){
+					wins++;
+					$('.win').empty().append("Wins: " + wins);
+					$('.result').empty().append("You win!");
+					newGame();
+				}
+
+				if (score > goal){
+					lose++;
+					$('.lose').empty().append("Losses: " + lose);
+					$('.result').empty().append(score + " exceeds " + goal + ", game over.");
+					newGame();
+				}
+			}
+
 			
+			//when the start button is clicked, run the new game function
 			$(".startGame").on("click", function(){
-		newGame();
+				newGame();
 			});
+
+
 			//jQuery("#ContactInfo").removeAttr('disabled');
-		
+
+			//on gem click...
+			$('.gem').on('click', function(){
+				//add the value of the gem to the score
+				score = score + gems[$(this).attr("value")];
+				//print the new score
+				$('.score').empty().append(score);
+				//and check to see if the player wins or looses
+				checkGame();
+			});
+		});
 		</script>
 	</body>
 </html>

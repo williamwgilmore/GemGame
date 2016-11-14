@@ -1,0 +1,14 @@
+.title {
+	background: lightblue;
+	text-align: center;
+	font-size: 30px;
+}
+
+.instructions {
+	background: lightgreen;
+	font-size: 20px;
+}
+
+.num {
+	background: lightblue;	
+}
