@@ -2,6 +2,7 @@
 	background: lightblue;
 	text-align: center;
 	font-size: 30px;
+	margin: 10px 0px 10px;
 }
 
 .instructions {
@@ -9,6 +10,16 @@
 	font-size: 20px;
 }
 
-.num {
-	background: lightblue;	
+.scoreboard {
+	background: gold;
+	font-size: 	20px;
+}
+
+.winlose {
+	background: orangered;
+	font-size: 18px;
+}
+
+.centerimg {
+		margin: 0 auto;
 }
